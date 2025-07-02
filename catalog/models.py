@@ -169,7 +169,7 @@ class Article(models.Model):
         return self.ratings.count()
 
     @property
-    def review_count(self):
+    def comments_count(self):
         """Number of reviews for an article."""
 
         return self.comments.count()
