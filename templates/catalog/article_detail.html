@@ -1,0 +1,280 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+  {% load static %}
+
+  <link rel="stylesheet" href="{% static 'assets/rating_style.css' %}">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  {% include 'includes/navigation.html' %}
+
+  <header>
+    <div class="page-header min-height-400" style="background-image: url('{{ ASSETS_ROOT }}/img/city-profile.jpg');"
+         loading="lazy">
+      <span class="mask bg-gradient-dark opacity-8"></span>
+    </div>
+  </header>
+
+  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4">
+    <!-- START Testimonials w/ user image & text & info -->
+    <section class="py-sm-7 py-5 position-relative">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 mx-auto">
+
+            <div class="row py-5">
+              <div class="col-lg-7 col-md-6 z-index-2 position-relative px-md-2 px-sm-5 mx-12">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h3 class="mb-1">{{ article_detail.title }}</h3>
+
+                </div>
+                <div class="row mb-4">
+
+                  <div class="col-md-6">
+                    <div class="mb-2">
+                      <span>👁️ Views:</span>
+                      <span class="h6">{{ article_detail.views_count }}</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>⭐ Rating:</span>
+                      <span class="h6">{{ average_rating|floatformat:1 }} ({{ rating_count }} votes)</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>💬 Comments:</span>
+                      <span class="h6">{{ article_detail.comments_count }}</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>📚 Category:</span>
+                      <span class="h6">{{ article_detail.category.topic }}</span>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-6">
+                    <div class="mb-2">
+                      <span>🏢 Knowledge Base:</span>
+                      <span class="h6">{{ article_detail.category.knowledge_base.title }}</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>📖 Reading time:</span>
+                      <span class="h6">{{ article_detail.reading_time }} min</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>📅 Created:</span>
+                      <span class="h6">{{ article_detail.created_at|date:"d M Y" }}</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>🔄 Updated:</span>
+                      <span class="h6">{{ article_detail.updated_at|date:"d M Y" }}</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <p class="text-lg mb-0">
+                {{ article_detail.content }}<br>
+
+
+              <div class="text-center mt-4">
+                <p class="mb-1">
+                  👤 <strong>Author:</strong> {{ article_detail.author.full_name }}
+                </p>
+
+                {% if article_detail.author.position %}
+                  <p class="mb-1">
+                    <strong>Position:</strong> {{ article_detail.author.position }}
+                  </p>
+                {% endif %}
+
+                {% if article_detail.author.level %}
+                  <p class="mb-1">
+                    <strong>Level:</strong> {{ article_detail.author.level }}
+                  </p>
+                {% endif %}
+
+                <p class="mb-1">
+                  ⭐ <strong>Author Rating:</strong> {{ article_detail.author.author_rating }} &nbsp;|&nbsp; 5
+                </p>
+                <p class="mb-1">
+                  <strong>Articles:</strong> {{ article_detail.author.published_articles_count }}
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion mb-4" id="commentsAccordion" style="max-height: 300px; overflow-y: auto;">
+          {% for comment in comments %}
+            <div class="accordion-item mb-2"
+                 style="background-color: #1c1c1e; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+              <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}"
+                        aria-expanded="false" aria-controls="collapse{{ forloop.counter }}"
+                        style="background-color: #959ea9; color: white; border: none;">
+                  👤 {{ comment.commentator.full_name }} - 🕒 {{ comment.created_at|date:"d M Y H:i" }}
+
+                </button>
+
+              </h2>
+              <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+                   aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#commentsAccordion">
+                <div class="accordion-body" style="background-color: papayawhip; color: black;">
+                  {{ comment.commentary }}
+                </div>
+
+                <div class="comment-content">
+
+                  {% if comment.commentator == user %}
+                    <a href="{% url 'catalog:comment-update' article_pk=article_detail.pk pk=comment.pk %}"
+                       class="btn btn-sm btn-outline-danger mt-1">
+                      Update
+                    </a>
+
+                    <a href="{% url 'catalog:comment-delete' article_pk=article_detail.pk pk=comment.pk %}"
+                       class="btn btn-sm btn-outline-primary mt-1">
+                      Delete
+                    </a>
+                  {% endif %}
+
+                </div>
+
+              </div>
+
+            </div>
+          {% empty %}
+            <p class="text" style="background-color: #1c1c1e; color: white; padding: 15px; border-radius: 8px;">
+              No comments yet. Be the first to comment! 🎉
+            </p>
+          {% endfor %}
+        </div>
+
+
+      </div>
+    </section>
+  </div>
+
+
+  <section class="py-lg-5">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card box-shadow-xl overflow-hidden mb-5">
+            <div class="row">
+              <div class="col-lg-5 position-relative bg-cover px-0"
+                   style="background-image: url('{{ ASSETS_ROOT }}/img/examples/blog2.jpg')" loading="lazy">
+                <div
+                    class="d-flex flex-column justify-content-center align-items-center text-center h-100 w-100 position-relative">
+                  <div class="mask bg-gradient-dark"></div>
+
+
+                  {% if user.is_authenticated %}
+                    <div class="position-relative text-white z-index-2 text-center w-100 px-4">
+                      <h5 class="text-white mb-3">⭐ Rate This Article</h5>
+
+                      {% if user_rating %}
+                        <p class="text-white mb-2 current-rating-display"
+                           style="padding: 10px; border-radius: 8px; text-align: center;">
+                          🌟 Your current rating: <strong>{{ user_rating.rating }}/5</strong>
+                          - {{ user_rating.get_rating_display }}
+                        </p>
+                      {% endif %}
+
+                      <form method="post" class="text-center">
+                        {% csrf_token %}
+                        <div class="form-group d-flex justify-content-center mb-3">
+
+                          <div class="rating-stars">
+
+                            {% for value, label in rating_form.rating.field.choices %}
+
+                              {% if value %}
+                                <input type="radio" name="rating" id="star{{ value }}" value="{{ value }}"
+                                       {% if user_rating and user_rating.rating == value %}checked{% endif %}
+                                       style="display: none;">
+                                <label for="star{{ value }}" class="star-label"
+                                       title="{{ value }} star{{ value|pluralize }}"
+                                       {% if user_rating and user_rating.rating == value %}data-selected="true"{% endif %}>
+                                  ⭐
+                                </label>
+
+                              {% endif %}
+
+                            {% endfor %}
+                          </div>
+
+                        </div>
+                        {% if rating_form.rating.errors %}
+                          <div class="text-danger mb-2">
+                            {% for error in rating_form.rating.errors %}
+                              <small>{{ error }}</small>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                        <button type="submit" name="submit_rating" class="btn btn-warning text-dark w-100">
+                          {% if user_rating %}🔄 Update Rating{% else %}🌟 Submit Rating{% endif %}
+                        </button>
+                      </form>
+                    </div>
+                  {% else %}
+                    <div class="mt-4 text-center">
+                      <div class="text-white"
+                           style="background-color: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <p class="mb-2">🔐 Please <a href="{% url 'login' %}" class="text-warning">log in</a> to rate
+                          this article</p>
+                        <div class="rating-stars-preview">
+                          <span style="font-size: 1.5rem; color: #ffd700;">⭐⭐⭐⭐⭐</span>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+
+
+                </div>
+              </div>
+              <div class="col-lg-7">
+
+                <div class="card-header px-4 py-sm-5 py-3">
+                  <h2>Leave Commentary</h2>
+                </div>
+                <div class="card-body pt-1">
+                  <div class="row">
+                    <div class="col-md-12 pe-2 mb-3">
+                      <div class="input-group input-group-static mb-2">
+
+
+                        {% if user.is_authenticated %}
+                          <form method="post" class="mt-4">
+                            {% csrf_token %}
+                            {{ comment_form|crispy }}
+                            <button type="submit" name="submit_comment" class="btn btn-primary">💬 Add Comment</button>
+                          </form>
+                        {% endif %}
+
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

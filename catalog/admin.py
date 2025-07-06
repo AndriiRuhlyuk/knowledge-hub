@@ -89,9 +89,9 @@ class ArticleAdmin(admin.ModelAdmin):
         "created_at",
         "views_count",
         "average_rating",
-        "rating_count",
         "comments_count",
         "updated_at",
+        "reading_time"
     )
 
     fieldsets = (

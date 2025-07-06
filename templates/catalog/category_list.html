@@ -1,0 +1,256 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+<body class="presentation-page bg-gray-200">
+
+{% block body_class %} about-us {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  {% include 'includes/navigation.html' %}
+
+  <header class="bg-gradient-dark">
+    <div class="page-header min-vh-45" style="background-image: url('{{ ASSETS_ROOT }}/img/bg9.jpg');">
+      <span class="mask bg-gradient-dark opacity-6"></span>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center mx-auto my-auto">
+            <h1 class="text-white">Category List</h1>
+            <p class="lead mb-4 text-white opacity-8">We are constantly trying to develop and learn.
+              If you have the opportunity, come play this game with us!</p>
+
+            <button type="submit" class="btn bg-white text-dark">Create Account</button>
+
+            <div class="d-flex justify-content-center">
+              <a href="javascript:;"><i class="fab fa-facebook text-lg text-white me-4"></i></a>
+              <a href="javascript:;"><i class="fab fa-instagram text-lg text-white me-4"></i></a>
+              <a href="javascript:;"><i class="fab fa-twitter text-lg text-white me-4"></i></a>
+              <a href="javascript:;"><i class="fab fa-google-plus text-lg text-white"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+    <!-- Section with four info areas left & one card right with image and waves -->
+    <section class="py-7">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="row justify-content-start">
+
+              {% if total_categories %}
+
+                {% for cat in category_list %}
+
+                  <div class="col-md-3">
+                    <div class="info">
+                      <i class="material-icons text-3xl text-gradient text-info mb-3">apps</i>
+                      <a  href="{% url 'catalog:category-detail' pk=cat.id %}" >
+                        <h5>{{ cat.topic }}</h5>
+                      </a>
+                      <hr>
+                      <p>Authors count: {{ cat.authors_count }}</p>
+                      <p>Articles count: {{ cat.articles_count }} </p>
+
+                    </div>
+                  </div>
+
+                {% endfor %}
+                {% include "includes/pagination.html" %}
+              {% else %}
+                <p>There are no Categories yet! Create first!</p>
+              {% endif %}
+
+            </div>
+          </div>
+          <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+            <div class="card">
+              <div class="card shadow-lg border-0"
+                   style="border-radius: 20px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85)); backdrop-filter: blur(10px);"></div>
+              <div class="card-body p-4">
+
+              </div>
+              <div class="card-body text-center">
+                <div class="font-weight-normal"></div>
+
+                <h1 class="text-center mb-4"
+                    style="color: #7c3aed; font-size: 2rem; font-weight: 600; letter-spacing: -0.5px;">
+                  Categories
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-center text-muted mb-4"
+                   style="font-size: 1rem; line-height: 1.6; color: #64748b !important;">
+                  Find categories you're interested in the knowledge base. Enter the topic name and get the result.
+                </p>
+
+                <section class="py-2">
+                  <div class="container">
+                    <div class="row justify-content-center py-2">
+                      <div class="col-lg-10">
+
+                        <form method="GET" action="" class="p-4 shadow-sm rounded"
+                              style="background: white; border: 1px solid #e2e8f0;">
+
+                          {{ search_form.topic }}
+
+                          <div class="text-center">
+                            <button type="submit"
+                                    class="btn w-100 text-white py-3"
+                                    style="background: linear-gradient(135deg, #7c3aed, #a855f7); font-weight: 600; font-size: 16px; border-radius: 12px;">
+                              SEARCH
+                            </button>
+                          </div>
+
+                        </form>
+
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+    </section>
+
+    <!-- END Section with four info areas left & one card right with image and waves -->
+    <!-- -------- START Features w/ pattern background & stats & rocket -------- -->
+    <section class="pb-5 position-relative bg-gradient-dark mx-n3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 text-start mb-5 mt-5">
+            <h3 class="text-white z-index-1 position-relative">Some Numbers</h3>
+            <p class="text-white opacity-8 mb-0">"There’s nothing I really wanted to do in life that I wasn’t able to
+              get good at. That’s my skill."</p>
+          </div>
+        </div>
+        <section class="pt-4 pb-6" id="count-stats">
+          <div class="container">
+            <div class="row justify-content-center text-center">
+              <div class="col-md-3">
+                <h1 class="text-gradient text-info" id="state1" countTo={{ site_stats.total_employees }}>0</h1>
+                <h5>Employees</h5>
+                <p>Our teams are constantly growing!</p>
+              </div>
+              <div class="col-md-3">
+                <h1 class="text-gradient text-info"><span id="state2" countTo={{ site_stats.total_comments }}>0</span>
+                </h1>
+                <h5>Comments</h5>
+                <p>Let's support each other!</p>
+              </div>
+              <div class="col-md-3">
+                <h1 class="text-gradient text-info"><span id="state3" countTo={{ site_stats.active_authors }}>0</span>
+                </h1>
+                <h5>Authors</h5>
+                <p>Our creative and scientific potential!</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+    <!-- -------- END Features w/ pattern background & stats & rocket -------- -->
+
+  </div>
+  </body>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+      // get the element to animate
+      var element = document.getElementById('count-stats');
+      var elementHeight = element.clientHeight;
+
+      // listen for scroll event and call animate function
+
+      document.addEventListener('scroll', animate);
+
+      // check if element is in view
+      function inView() {
+          // get window height
+          var windowHeight = window.innerHeight;
+          // get number of pixels that the document is scrolled
+          var scrollY = window.scrollY || window.pageYOffset;
+          // get current scroll position (distance from the top of the page to the bottom of the current viewport)
+          var scrollPosition = scrollY + windowHeight;
+          // get element position (distance from the top of the page to the bottom of the element)
+          var elementPosition = element.getBoundingClientRect().top + scrollY + elementHeight;
+
+          // is scroll position greater than element position? (is element in view?)
+          if (scrollPosition > elementPosition) {
+              return true;
+          }
+
+          return false;
+      }
+
+      var animateComplete = true;
+
+      // animate element when it is in view
+      function animate() {
+
+          // is element in view?
+          if (inView()) {
+              if (animateComplete) {
+                  if (document.getElementById('state1')) {
+                      const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+                      if (!countUp.error) {
+                          countUp.start();
+                      } else {
+                          console.error(countUp.error);
+                      }
+                  }
+                  if (document.getElementById('state2')) {
+                      const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
+                      if (!countUp1.error) {
+                          countUp1.start();
+                      } else {
+                          console.error(countUp1.error);
+                      }
+                  }
+                  if (document.getElementById('state3')) {
+                      const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
+                      if (!countUp2.error) {
+                          countUp2.start();
+                      } else {
+                          console.error(countUp2.error);
+                      }
+                      ;
+                  }
+                  animateComplete = false;
+              }
+          }
+      }
+
+      if (document.getElementById('typed')) {
+          var typed = new Typed("#typed", {
+              stringsElement: '#typed-strings',
+              typeSpeed: 90,
+              backSpeed: 90,
+              backDelay: 200,
+              startDelay: 500,
+              loop: true
+          });
+      }
+  </script>
+
+  <script>
+      if (document.getElementsByClassName('page-header')) {
+          window.onscroll = debounce(function () {
+              var scrollPosition = window.pageYOffset;
+              var bgParallax = document.querySelector('.page-header');
+              var oVal = (window.scrollY / 3);
+              bgParallax.style.transform = 'translate3d(0,' + oVal + 'px,0)';
+          }, 6);
+      }
+  </script>
+
+{% endblock javascripts %}

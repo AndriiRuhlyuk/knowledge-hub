@@ -1,0 +1,294 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+<body class="presentation-page bg-gray-200">
+
+{% block body_class %} about-us {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+  <style>
+      .nav-pills .nav-link.active {
+          background-color: #7c3aed;
+          color: white;
+          border-radius: 1rem;
+          font-weight: 600;
+          transition: 0.3s;
+      }
+
+      .nav-pills .nav-link {
+          color: #1e293b;
+      }
+  </style>
+{% endblock %}
+
+
+{% block content %}
+
+  {% include 'includes/navigation.html' %}
+
+  <header class="bg-gradient-dark">
+    <div class="page-header min-vh-45" style="background-image: url('{{ ASSETS_ROOT }}/img/bg9.jpg');">
+      <span class="mask bg-gradient-dark opacity-6"></span>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center mx-auto my-auto">
+            <h1 class="text-white">
+              {% if filter == "authors" %}
+                Authors List
+              {% else %}
+                Employees List
+              {% endif %}
+            </h1>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+    <!-- Section with four info areas left & one card right with image and waves -->
+    <section class="py-7">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-12">
+            <div class="row justify-content-start">
+
+
+              <section class="py-7">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-lg-4 mx-auto">
+                      <div class="nav-wrapper position-relative end-0">
+
+                        <ul class="nav nav-pills nav-fill p-1 bg-light rounded" role="tablist">
+                          <li class="nav-item">
+                            <a class="nav-link mb-0 px-0 py-1 {% if filter == 'all' %}active{% endif %}"
+                               href="{% url 'catalog:employee-list' %}?filter=all">
+                              Employees
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link mb-0 px-0 py-1 {% if filter == 'authors' %}active{% endif %}"
+                               href="{% url 'catalog:employee-list' %}?filter=authors">
+                              Authors
+                            </a>
+                          </li>
+                        </ul>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+
+
+              {% if employee_list %}
+                <table class="table">
+                <tr>
+                  <th>Full Name</th>
+                  <th>Position</th>
+                  <th>Project</th>
+                  <th>Level</th>
+                  <th>Published Articles</th>
+                  <th>Rating</th>
+
+
+                </tr>
+                {% for emp in employee_list %}
+
+                  <tr>
+                  <td>
+                    <a href="{% url 'catalog:employee-detail' pk=emp.pk %}">{{ emp.full_name }}</a>
+                  </td>
+                  <td>
+                    {{ emp.position }}
+                  </td>
+                  <td>
+                    {{ emp.project|default:"-" }}
+                  </td>
+                  <td>
+                    {{ emp.level|default:"-" }}
+                  </td>
+                  <td>
+                    {{ emp.published_articles_total }}
+                  </td>
+                  <td>
+                    {{ emp.author_rating }}
+                  </td>
+
+
+                {% endfor %}
+
+              {% else %}
+                <p>There are no Data yet! Create first!</p>
+              {% endif %}
+              </table>
+              <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                  {% include "includes/pagination.html" %}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card shadow-lg border-0"
+             style="border-radius: 20px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85)); backdrop-filter: blur(10px);"></div>
+        <div class="card-body p-4">
+
+        </div>
+        <div class="card-body text-center">
+          <div class="font-weight-normal"></div>
+
+          {% if filter == "authors" %}
+
+            <h1 class="text-center mb-4"
+                style="color: #7c3aed; font-size: 2rem; font-weight: 600; letter-spacing: -0.5px;">
+              Authors
+            </h1>
+
+          {% else %}
+            <h1 class="text-center mb-4"
+                style="color: #7c3aed; font-size: 2rem; font-weight: 600; letter-spacing: -0.5px;">
+              Employees
+            </h1>
+
+          {% endif %}
+
+          <!-- Subtitle -->
+          <p class="text-center text-muted mb-4"
+             style="font-size: 1rem; line-height: 1.6; color: #64748b !important;">
+          </p>
+
+          <section class="py-4">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                  <div class="card p-4 shadow-sm rounded">
+                    <h4 class="text-center mb-4">Search {% if filter == "authors" %} Author {% else %}
+                      Employee {% endif %}  by name or username</h4>
+
+                    <form method="GET" action="">
+                      <div class="mb-3">
+                        {{ search_form.query|as_crispy_field }}
+                      </div>
+
+                      <input type="hidden" name="filter" value={{ filter }}>
+                      <button type="submit"
+                              class="btn w-100 text-white py-3"
+                              style="background: linear-gradient(135deg, #7c3aed, #a855f7); font-weight: 600; font-size: 16px; border-radius: 12px;">
+                        SEARCH
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+  </body>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+      // get the element to animate
+      var element = document.getElementById('count-stats');
+      var elementHeight = element.clientHeight;
+
+      // listen for scroll event and call animate function
+
+      document.addEventListener('scroll', animate);
+
+      // check if element is in view
+      function inView() {
+          // get window height
+          var windowHeight = window.innerHeight;
+          // get number of pixels that the document is scrolled
+          var scrollY = window.scrollY || window.pageYOffset;
+          // get current scroll position (distance from the top of the page to the bottom of the current viewport)
+          var scrollPosition = scrollY + windowHeight;
+          // get element position (distance from the top of the page to the bottom of the element)
+          var elementPosition = element.getBoundingClientRect().top + scrollY + elementHeight;
+
+          // is scroll position greater than element position? (is element in view?)
+          if (scrollPosition > elementPosition) {
+              return true;
+          }
+
+          return false;
+      }
+
+      var animateComplete = true;
+
+      // animate element when it is in view
+      function animate() {
+
+          // is element in view?
+          if (inView()) {
+              if (animateComplete) {
+                  if (document.getElementById('state1')) {
+                      const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+                      if (!countUp.error) {
+                          countUp.start();
+                      } else {
+                          console.error(countUp.error);
+                      }
+                  }
+                  if (document.getElementById('state2')) {
+                      const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
+                      if (!countUp1.error) {
+                          countUp1.start();
+                      } else {
+                          console.error(countUp1.error);
+                      }
+                  }
+                  if (document.getElementById('state3')) {
+                      const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
+                      if (!countUp2.error) {
+                          countUp2.start();
+                      } else {
+                          console.error(countUp2.error);
+                      }
+                      ;
+                  }
+                  animateComplete = false;
+              }
+          }
+      }
+
+      if (document.getElementById('typed')) {
+          var typed = new Typed("#typed", {
+              stringsElement: '#typed-strings',
+              typeSpeed: 90,
+              backSpeed: 90,
+              backDelay: 200,
+              startDelay: 500,
+              loop: true
+          });
+      }
+  </script>
+
+  <script>
+      if (document.getElementsByClassName('page-header')) {
+          window.onscroll = debounce(function () {
+              var scrollPosition = window.pageYOffset;
+              var bgParallax = document.querySelector('.page-header');
+              var oVal = (window.scrollY / 3);
+              bgParallax.style.transform = 'translate3d(0,' + oVal + 'px,0)';
+          }, 6);
+      }
+  </script>
+
+{% endblock javascripts %}

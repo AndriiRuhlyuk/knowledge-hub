@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, F
 
 
 class KnowledgeBase(models.Model):
@@ -18,6 +18,10 @@ class KnowledgeBase(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="created at"
+    )
+
+    short_description = models.TextField(
+        blank=True,
     )
 
 
@@ -46,7 +50,12 @@ class Category(models.Model):
         ordering = ["topic"]
         verbose_name = "category"
         verbose_name_plural = "categories"
-        unique_together = ("topic", "knowledge_base")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["topic", "knowledge_base"],
+                name="unique_category_per_kb"
+            )
+        ]
 
 
     def __str__(self):
@@ -82,9 +91,7 @@ class Employee(AbstractUser):
         verbose_name_plural = "employees"
 
     def __str__(self):
-        if self.first_name and self.last_name:
-            return f"{self.first_name} {self.last_name}"
-        return self.username
+        return self.full_name
 
     @property
     def full_name(self):
@@ -104,12 +111,10 @@ class Employee(AbstractUser):
     def author_rating(self):
         """Rating of an author."""
 
-        published_rating_articles = self.articles.filter(
+        aggregation_result = self.articles.filter(
             is_published=True,
             ratings__isnull=False,
-        )
-
-        aggregation_result = published_rating_articles.aggregate(
+        ).aggregate(
             avg_rating=Avg("ratings__rating"),
         )
         average_rating_value = aggregation_result["avg_rating"]
@@ -154,11 +159,20 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        """Auto-calculate reading time based on content length."""
+
+        word_count = len(self.content.split())
+        self.reading_time = max(1, word_count // 60)
+        super().save(*args, **kwargs)
+
     @property
     def average_rating(self):
         """Average rating for an article."""
 
-        aggregation_result = self.ratings.aggregate(avg_rating=Avg("rating"))
+        aggregation_result = self.ratings.aggregate(
+            avg_rating=Avg("rating")
+        )
         average_rating_value = aggregation_result["avg_rating"]
         return round(average_rating_value, 1) if average_rating_value else 0
 
@@ -174,12 +188,12 @@ class Article(models.Model):
 
         return self.comments.count()
 
-
     def increment_views(self):
         """Increment the views count"""
 
-        self.views_count += 1
-        self.save(update_fields=['views_count'])
+        self.views_count = F("views_count") + 1
+        self.save(update_fields=["views_count"])
+        self.refresh_from_db(fields=["views_count"])
 
 
 class Rating(models.Model):
@@ -216,7 +230,12 @@ class Rating(models.Model):
         ordering = ["rating"]
         verbose_name = "rating"
         verbose_name_plural = "ratings"
-        unique_together = ["article", "employee"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["article", "employee"],
+                name="unique_rating_per_article_employee"
+            )
+        ]
 
     def __str__(self):
         return f"{self.employee.full_name} - {self.article.title} ({self.rating}/5)"
