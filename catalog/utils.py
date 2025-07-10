@@ -5,16 +5,23 @@ from .models import Article, KnowledgeBase, Category, Employee, Comment
 def get_site_statistics() -> dict[str, int]:
     """Return a dictionary of statistics about the current site."""
 
+    data = KnowledgeBase.objects.aggregate(
+        total_knowledge_bases=Count("id"),
+        total_categories=Count("categories"),
+    )
+    articles_stats = Article.objects.aggregate(
+        total_articles=Count("id", filter=Q(is_published=True)),
+        total_comments=Count("comments"),
+        total_authors=Count("author", filter=Q(is_published=True), distinct=True),
+    )
+    employee_count = Employee.objects.count()
+
     return {
-        "total_knowledge_bases": KnowledgeBase.objects.count(),
-        "total_categories": Category.objects.count(),
-        "total_articles": Article.objects.filter(is_published=True).count(),
-        "total_employees": Employee.objects.count(),
-        "total_comments": Comment.objects.count(),
-        "active_authors": Employee.objects.filter(
-            articles__is_published=True
-        ).distinct().count(),
+        **data,
+        **articles_stats,
+        "total_employees": employee_count,
     }
+
 
 def get_top_statistics()-> dict[str, any]:
     """Return most viewed, top-rated, most active author, and largest category."""

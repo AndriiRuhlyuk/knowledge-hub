@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from catalog.models import Rating, Comment, Employee
+from catalog.models import Rating, Comment, Employee, KnowledgeBase, Category, Article
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django_select2.forms import ModelSelect2Widget
 
 
 class KnowledgeBaseSearchForm(forms.Form):
@@ -56,6 +57,7 @@ class EmployeeSearchForm(forms.Form):
         })
     )
 
+
 class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
@@ -83,6 +85,7 @@ class CommentForm(forms.ModelForm):
             })
         }
 
+
 class EmployeeUpdateForm(UserChangeForm):
     class Meta:
         model = Employee
@@ -101,8 +104,25 @@ class EmployeeUpdateForm(UserChangeForm):
         if "password" in self.fields:
             self.fields.pop("password")
 
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            existing_classes = widget.attrs.get("class", "")
+
+            if isinstance(widget, forms.RadioSelect):
+                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+
+            else:
+                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+
 
 class EmployeeRegistrationForm(UserCreationForm):
+    """
+    Registration form for Employee model with:
+    - required email field
+    - border-design for every field
+    - email validation
+    """
+
     email = forms.EmailField(required=True)
 
     class Meta:
@@ -118,3 +138,109 @@ class EmployeeRegistrationForm(UserCreationForm):
             "position",
             "level",
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            existing_classes = widget.attrs.get("class", "")
+
+            if isinstance(widget, forms.RadioSelect):
+                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+
+            else:
+                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if Employee.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
+
+
+class KnowledgeBaseForm(forms.ModelForm):
+    created_by = forms.ModelChoiceField(
+        queryset=Employee.objects.all(),
+        widget=forms.RadioSelect
+    )
+
+    class Meta:
+        model = KnowledgeBase
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            existing_classes = widget.attrs.get("class", "")
+
+            if isinstance(widget, forms.RadioSelect):
+                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+
+            else:
+                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+
+
+class CategoryForm(forms.ModelForm):
+    knowledge_base = forms.ModelChoiceField(
+        queryset=KnowledgeBase.objects.all(),
+        widget=forms.RadioSelect
+    )
+    created_by = forms.ModelChoiceField(
+        queryset=Employee.objects.all(),
+        widget=forms.RadioSelect
+    )
+
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            existing_classes = widget.attrs.get("class", "")
+
+            if isinstance(widget, forms.RadioSelect):
+                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+
+            else:
+                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+
+
+class ArticleForm(forms.ModelForm):
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all().none(),
+        widget=forms.RadioSelect
+    )
+
+
+    class Meta:
+        model = Article
+        fields = ("title", "content", "category", "author")
+        widgets = {
+            "author": ModelSelect2Widget(
+                search_fields=["first_name__icontains", "last_name__icontains"],
+                attrs={
+                    "class": "form-control border border-dark",
+                    "data-minimum-input-length": 1,
+                    "data-placeholder": "Start input name..."
+                }
+            )
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            existing_classes = widget.attrs.get("class", "")
+
+            if isinstance(widget, forms.RadioSelect):
+                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+
+            else:
+                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()

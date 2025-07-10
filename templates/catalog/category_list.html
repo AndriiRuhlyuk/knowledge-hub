@@ -22,7 +22,9 @@
             <p class="lead mb-4 text-white opacity-8">We are constantly trying to develop and learn.
               If you have the opportunity, come play this game with us!</p>
 
-            <button type="submit" class="btn bg-white text-dark">Create Account</button>
+            <button type="submit" class="btn bg-white text-dark">
+              <a href="{% url 'catalog:category-create' %}">Create New Category</a>
+            </button>
 
             <div class="d-flex justify-content-center">
               <a href="javascript:;"><i class="fab fa-facebook text-lg text-white me-4"></i></a>
@@ -44,7 +46,7 @@
           <div class="col-lg-6">
             <div class="row justify-content-start">
 
-              {% if total_categories %}
+              {% if category_list %}
 
                 {% for cat in category_list %}
 

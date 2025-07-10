@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  {% include "includes/navigation.html" %}
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-danger">Delete Knowledge Base</h3>
+        <p>Are you sure you want to delete this Knowledge Base?</p>
+        <p>You can delete Knowledge Base if it does not contain any of the categories</p>
+
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, delete</button>
+          <a href="{% url 'catalog:knowledge-base-detail' pk=knowledgebase.pk %}" class="btn btn-secondary">Cancel</a>
+
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

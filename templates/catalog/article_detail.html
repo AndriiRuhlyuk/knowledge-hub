@@ -3,6 +3,11 @@
 
 
 <!-- Specific Page CSS goes HERE  -->
+
+{% block extrahead %}
+  {{ block.super }}
+{% endblock %}
+
 {% block stylesheets %}
   {% load static %}
 
@@ -11,6 +16,25 @@
 {% endblock stylesheets %}
 
 {% block content %}
+
+  {% if messages %}
+    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+              z-index: 1055; width: auto; max-width: 90%;">
+      {% for message in messages %}
+        <div class="alert text-white font-weight-bold shadow"
+             role="alert"
+             style="
+             background-color: #e91e63;
+             padding: 1rem 1.5rem;
+             border-radius: 8px;
+             text-align: center;
+             animation: fadeOut 5s forwards;
+           ">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
   {% include 'includes/navigation.html' %}
 
@@ -33,6 +57,17 @@
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h3 class="mb-1">{{ article_detail.title }}</h3>
 
+                  {% if request.user.is_superuser or request.user.author %}
+                    <a href="{% url 'catalog:article-update' pk=article_detail.pk %}"
+                       class="btn btn-sm btn-outline-primary">
+                      <i class="material-icons">edit</i> Edit
+                    </a>
+                    <a href="{% url 'catalog:article-delete' pk=article_detail.pk %}"
+                       class="btn btn-sm btn-outline-primary">
+                      <i class="material-icons">delete</i> Delete
+                    </a>
+                  {% endif %}
+
                 </div>
                 <div class="row mb-4">
 
@@ -43,11 +78,14 @@
                     </div>
                     <div class="mb-2">
                       <span>⭐ Rating:</span>
-                      <span class="h6">{{ average_rating|floatformat:1 }} ({{ rating_count }} votes)</span>
+                      <span class="h6">
+                        {{ rating_info.average_rating|default:"0"|floatformat:1 }}
+                        ({{ rating_info.rating_count|default:"0" }} votes)
+                      </span>
                     </div>
                     <div class="mb-2">
                       <span>💬 Comments:</span>
-                      <span class="h6">{{ article_detail.comments_count }}</span>
+                      <span class="h6">{{ article_detail.comments_total }}</span>
                     </div>
                     <div class="mb-2">
                       <span>📚 Category:</span>

@@ -8,6 +8,10 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
+{% block extrahead %}
+  {{ block.super }}
+{% endblock %}
+
 {% block content %}
 
   {% include 'includes/navigation.html' %}
@@ -19,6 +23,10 @@
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center mx-auto my-auto">
             <h1 class="text-white">Article List</h1>
+
+            <button type="submit" class="btn bg-white text-dark">
+              <a href="{% url 'catalog:article-create' %}">Create New Article</a>
+            </button>
 
 
           </div>

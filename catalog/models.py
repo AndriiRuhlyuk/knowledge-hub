@@ -24,6 +24,13 @@ class KnowledgeBase(models.Model):
         blank=True,
     )
 
+    created_by = models.ForeignKey(
+        "Employee",
+        on_delete=models.CASCADE,
+        related_name="knowledge_bases",
+        verbose_name="created_by",
+    )
+
 
     class Meta:
         ordering = ["title"]
@@ -45,6 +52,12 @@ class Category(models.Model):
         on_delete=models.PROTECT,
         related_name="categories",
     )
+    created_by = models.ForeignKey(
+        "Employee",
+        on_delete=models.CASCADE,
+        related_name="categories",
+        verbose_name="created_by",
+    )
 
     class Meta:
         ordering = ["topic"]
@@ -59,7 +72,7 @@ class Category(models.Model):
 
 
     def __str__(self):
-        return f"{self.knowledge_base.title} - {self.topic}"
+        return f"{self.topic}"
 
 
 class Employee(AbstractUser):
@@ -166,34 +179,6 @@ class Article(models.Model):
         self.reading_time = max(1, word_count // 60)
         super().save(*args, **kwargs)
 
-    @property
-    def average_rating(self):
-        """Average rating for an article."""
-
-        aggregation_result = self.ratings.aggregate(
-            avg_rating=Avg("rating")
-        )
-        average_rating_value = aggregation_result["avg_rating"]
-        return round(average_rating_value, 1) if average_rating_value else 0
-
-    @property
-    def rating_count(self):
-        """Number of articles rated."""
-
-        return self.ratings.count()
-
-    @property
-    def comments_count(self):
-        """Number of reviews for an article."""
-
-        return self.comments.count()
-
-    def increment_views(self):
-        """Increment the views count"""
-
-        self.views_count = F("views_count") + 1
-        self.save(update_fields=["views_count"])
-        self.refresh_from_db(fields=["views_count"])
 
 
 class Rating(models.Model):

@@ -3,8 +3,32 @@
 
 <!-- -------- START HEADER 1 w/ text and image on right ------- -->
 {% block content %}
+
+  {% if messages %}
+    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+              z-index: 1055; width: auto; max-width: 90%;">
+      {% for message in messages %}
+        <div class="alert text-white font-weight-bold shadow"
+             role="alert"
+             style="
+             background-color: #e91e63;
+             padding: 1rem 1.5rem;
+             border-radius: 8px;
+             text-align: center;
+             animation: fadeOut 5s forwards;
+           ">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <header>
+
+
     {% include "includes/navigation.html" %}
+
+
     <nav class="navbar navbar-expand-lg navbar-dark navbar-absolute bg-transparent shadow-none">
 
       <div class="container">
@@ -35,12 +59,22 @@
       <span class="mask bg-gradient-dark opacity-5"></span>
       <div class="container">
         <div class="row align-items-center">
-          <!-- Назва бази знань -->
+
           <div class="col-lg-6 col-md-6 mb-4">
             <h1 class="text-white mb-4">{{ category_detail }}</h1>
+            {% if request.user.is_superuser or request.user.created_by %}
+              <a href="{% url 'catalog:category-update' pk=category_detail.pk %}"
+                 class="btn btn-sm btn-outline-primary">
+                <i class="material-icons">edit</i> Edit
+              </a>
+              <a href="{% url 'catalog:category-delete' pk=category_detail.pk %}"
+                 class="btn btn-sm btn-outline-primary">
+                <i class="material-icons">delete</i> Delete
+              </a>
+            {% endif %}
           </div>
 
-          <!-- Рожевий блок -->
+
           <div class="col-lg-6 col-md-6 mb-4">
             <div class="rotating-card-container" style="width: 100%;">
               <div
@@ -52,11 +86,13 @@
                   <div class="card-body py-10 text-center">
                     <i class="material-icons text-white text-4xl my-3">touch_app</i>
                     <h3 class="text-white">{{ category_detail }} in detail.</h3>
+                    <h6 class="text-white"><i>Created by: {{ category_detail.created_by }}.</i></h6>
+
                     <p class="text-white opacity-8">
 
                       {% if articles %}
                         <ul>
-                          {% for art in articles|slice:"3" %}
+                          {% for art in articles|slice:"2" %}
                             <li>
                               Article: {{ art.title }}
                             </li>
@@ -64,7 +100,7 @@
                               Reading time: {{ art.reading_time }} minutes
                             </li>
                             <li>
-                              Authors count: {{ art.author.full_name }}
+                              Author: {{ art.author.full_name }}
                             </li>
                             <hr>
                           {% endfor %}

@@ -22,13 +22,12 @@
             <p class="lead mb-4 text-white opacity-8">We are constantly trying to develop and learn.
               If you have the opportunity, come play this game with us!</p>
 
-            <button type="submit" class="btn bg-white text-dark">Create Account</button>
+            <button type="submit" class="btn bg-white text-dark">
+              <a href="{% url 'catalog:knowledge-base-create' %}">Create New Knowledge Base</a>
+            </button>
 
             <div class="d-flex justify-content-center">
-              <a href="javascript:;"><i class="fab fa-facebook text-lg text-white me-4"></i></a>
-              <a href="javascript:;"><i class="fab fa-instagram text-lg text-white me-4"></i></a>
-              <a href="javascript:;"><i class="fab fa-twitter text-lg text-white me-4"></i></a>
-              <a href="javascript:;"><i class="fab fa-google-plus text-lg text-white"></i></a>
+
             </div>
           </div>
         </div>
@@ -49,9 +48,10 @@
                 {% for now_base in knowledge_base_list %}
 
                   <div class="col-md-3">
+
                     <div class="info">
                       <i class="material-icons text-3xl text-gradient text-info mb-3">apps</i>
-                      <a  href="{% url 'catalog:knowledge-base-detail' pk=now_base.id %}">
+                      <a href="{% url 'catalog:knowledge-base-detail' pk=now_base.id %}">
                         <h5>{{ now_base.title }}</h5>
                       </a>
                       <hr>
@@ -87,7 +87,8 @@
                 <!-- Subtitle -->
                 <p class="text-center text-muted mb-4"
                    style="font-size: 1rem; line-height: 1.6; color: #64748b !important;">
-                  Find topics you're interested in the knowledge base. Enter the knowledge base's title and get the result.
+                  Find topics you're interested in the knowledge base. Enter the knowledge base's title and get the
+                  result.
                 </p>
 
                 <section class="py-2">
@@ -143,7 +144,7 @@
                 <p>Let's support each other!</p>
               </div>
               <div class="col-md-3">
-                <h1 class="text-gradient text-info"><span id="state3" countTo={{ site_stats.active_authors }}>0</span>
+                <h1 class="text-gradient text-info"><span id="state3" countTo={{ site_stats.total_authors }}>0</span>
                 </h1>
                 <h5>Authors</h5>
                 <p>Our creative and scientific potential!</p>

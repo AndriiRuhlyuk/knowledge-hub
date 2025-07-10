@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.db.models import Avg
 
 from catalog.models import KnowledgeBase, Article, Comment, Category, Rating, Employee
 
@@ -110,6 +111,18 @@ class ArticleAdmin(admin.ModelAdmin):
         })
     )
     actions = ["publish_articles", "unpublish_articles"]
+
+    def average_rating(self, obj):
+        return round(obj.ratings.aggregate(avg=Avg("rating"))["avg"] or 0, 1)
+    average_rating.short_description = "Avg rating"
+
+    def rating_count(self, obj):
+        return obj.ratings.count()
+    rating_count.short_description = "Rating count"
+
+    def comments_count(self, obj):
+        return obj.comments.count()
+    comments_count.short_description = "Comments count"
 
     def get_short_content(self, obj):
         """Get shortened content for list display."""
