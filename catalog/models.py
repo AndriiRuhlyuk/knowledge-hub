@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Avg, F
+from django.db.models import Avg
 
 
 class KnowledgeBase(models.Model):
@@ -30,7 +30,6 @@ class KnowledgeBase(models.Model):
         related_name="knowledge_bases",
         verbose_name="created_by",
     )
-
 
     class Meta:
         ordering = ["title"]
@@ -69,7 +68,6 @@ class Category(models.Model):
                 name="unique_category_per_kb"
             )
         ]
-
 
     def __str__(self):
         return f"{self.topic}"
@@ -180,7 +178,6 @@ class Article(models.Model):
         super().save(*args, **kwargs)
 
 
-
 class Rating(models.Model):
     """
     Model for article ratings.
@@ -223,7 +220,8 @@ class Rating(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.employee.full_name} - {self.article.title} ({self.rating}/5)"
+        return (f"{self.employee.full_name} - "
+                f"{self.article.title} ({self.rating}/5)")
 
 
 class Comment(models.Model):

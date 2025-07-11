@@ -4,7 +4,7 @@ from itertools import islice
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Count, Q, Avg, ProtectedError, F, Prefetch
+from django.db.models import Count, Q, Avg, F, Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -21,7 +21,8 @@ from catalog.forms import (
     EmployeeUpdateForm,
     EmployeeRegistrationForm,
     KnowledgeBaseForm,
-    CategoryForm, ArticleForm
+    CategoryForm,
+    ArticleForm
 )
 from catalog.models import (
     KnowledgeBase,
@@ -31,7 +32,10 @@ from catalog.models import (
     Rating,
     Comment
 )
-from catalog.utils import get_top_statistics, get_site_statistics
+from catalog.utils import (
+    get_top_statistics,
+    get_site_statistics
+)
 
 
 class HomeView(LoginRequiredMixin, generic.TemplateView):
@@ -51,12 +55,15 @@ class HomeView(LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-#________________________Knowledge Views_____________________________
 def get_second_half_stats(stats_dict, skip=3):
+    """General statistics about employees, comments, authors"""
     return dict(islice(stats_dict.items(), skip, None))
 
 
-class KnowledgeBaseListView(LoginRequiredMixin, generic.ListView):
+class KnowledgeBaseListView(
+    LoginRequiredMixin,
+    generic.ListView
+):
     """Knowledge bases list page."""
 
     model = KnowledgeBase
@@ -105,7 +112,10 @@ class KnowledgeBaseListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class KnowledgeBaseDetailsView(LoginRequiredMixin, generic.DetailView):
+class KnowledgeBaseDetailsView(
+    LoginRequiredMixin,
+    generic.DetailView
+):
     """Knowledge base detail page with categories and articles."""
 
     model = KnowledgeBase
@@ -116,7 +126,9 @@ class KnowledgeBaseDetailsView(LoginRequiredMixin, generic.DetailView):
     def object_with_prefetch(self, queryset=None):
 
         return get_object_or_404(
-            KnowledgeBase.objects.select_related("created_by").prefetch_related(
+            KnowledgeBase.objects.select_related(
+                "created_by"
+            ).prefetch_related(
                 "categories__articles__author"
             ),
             pk=self.kwargs["pk"],
@@ -139,14 +151,19 @@ class KnowledgeBaseDetailsView(LoginRequiredMixin, generic.DetailView):
                 "articles",
                 filter=Q(
                     articles__is_published=True,
-                    articles__created_at__gte=timezone.now() - timedelta(days=7)
+                    articles__created_at__gte=timezone.now() - timedelta(
+                        days=7
+                    )
                 ),
             )
         ).order_by("topic")
         return context
 
 
-class KnowledgeBaseCreateView(LoginRequiredMixin, generic.CreateView):
+class KnowledgeBaseCreateView(
+    LoginRequiredMixin,
+    generic.CreateView
+):
     """Knowledge Base create page."""
 
     model = KnowledgeBase
@@ -176,18 +193,24 @@ class KnowledgeBaseUpdateView(
         return self._object
 
     def get_success_url(self):
-        return reverse("catalog:knowledge-base-detail", kwargs={"pk": self.get_object().pk})
+        return reverse(
+            "catalog:knowledge-base-detail",
+            kwargs={"pk": self.get_object().pk}
+        )
 
     def test_func(self):
         knowledge_base = self.get_object()
         user = self.request.user
 
-        is_owner_or_admin = knowledge_base.created_by or user.is_superuser
-        return is_owner_or_admin
+        return knowledge_base.created_by == user or user.is_superuser
 
 
-class KnowledgeBaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
-    """Knowledge Base delete veiw."""
+class KnowledgeBaseDeleteView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.DeleteView
+):
+    """Knowledge Base delete view."""
 
     model = KnowledgeBase
     template_name = "catalog/knowledge_base_delete_confirm.html"
@@ -206,13 +229,21 @@ class KnowledgeBaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.D
                 knowledge_base.created_by == user or user.is_superuser
         ) and not knowledge_base.categories.exists()
 
-
     def handle_no_permission(self):
-        messages.error(self.request, "You can only delete empty knowledge bases that you created.")
-        return redirect("catalog:knowledge-base-detail", pk=self._object.pk)
+        messages.error(
+            self.request,
+            "You can only delete empty knowledge bases that you created."
+        )
+        return redirect(
+            "catalog:knowledge-base-detail",
+            pk=self._object.pk
+        )
 
 
-class CategoriesByKnowledgeBaseView(LoginRequiredMixin, generic.ListView):
+class CategoriesByKnowledgeBaseView(
+    LoginRequiredMixin,
+    generic.ListView
+):
     """Categories by knowledge base view."""
 
     model = Category
@@ -221,7 +252,9 @@ class CategoriesByKnowledgeBaseView(LoginRequiredMixin, generic.ListView):
     paginate_by = 1
 
     def get_queryset(self):
-        self.knowledge_base_by_kb = get_object_or_404(KnowledgeBase, pk=self.kwargs["pk"])
+        self.knowledge_base_by_kb = get_object_or_404(
+            KnowledgeBase, pk=self.kwargs["pk"]
+        )
         return Category.objects.filter(
             knowledge_base=self.knowledge_base_by_kb
         ).annotate(
@@ -247,8 +280,11 @@ class CategoriesByKnowledgeBaseView(LoginRequiredMixin, generic.ListView):
         context["knowledge_base"] = self.knowledge_base_by_kb
         return context
 
-#__________________________________Category Views___________________________
-class CategoryListView(LoginRequiredMixin, generic.ListView):
+
+class CategoryListView(
+    LoginRequiredMixin,
+    generic.ListView
+):
     """Category list page."""
 
     model = Category
@@ -290,7 +326,10 @@ class CategoryListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class CategoryDetailsView(LoginRequiredMixin, generic.DetailView):
+class CategoryDetailsView(
+    LoginRequiredMixin,
+    generic.DetailView
+):
     """Category detail page."""
 
     model = Category
@@ -310,20 +349,27 @@ class CategoryDetailsView(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         category = self.cat
 
-        articles = category.articles.filter(is_published=True).select_related("author")
+        articles = category.articles.filter(
+            is_published=True
+        ).select_related("author")
 
         context["articles"] = articles
-        context["reading_time_sum"] = articles.aggregate(total=Count("reading_time"))["total"]
+        context["reading_time_sum"] = articles.aggregate(
+            total=Count("reading_time")
+        )["total"]
         return context
 
 
-class CategoryCreateView(LoginRequiredMixin, generic.CreateView):
+class CategoryCreateView(
+    LoginRequiredMixin,
+    generic.CreateView
+):
     """Category create page."""
 
     model = Category
     form_class = CategoryForm
     template_name = "catalog/category_form.html"
-    success_url = reverse_lazy("catalog:category_list")
+    success_url = reverse_lazy("catalog:category-list")
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -345,17 +391,18 @@ class CategoryUpdateView(
         if not hasattr(self, "_object"):
             self._object = super().get_object(queryset)
         return self._object
-    
 
     def get_success_url(self):
-        return reverse_lazy("catalog:category-detail", kwargs={"pk": self.get_object().pk})
+        return reverse_lazy(
+            "catalog:category-detail",
+            kwargs={"pk": self.get_object().pk}
+        )
 
     def test_func(self):
         category = self.get_object()
         user = self.request.user
 
-        is_owner_or_admin = category.created_by or user.is_superuser
-        return is_owner_or_admin
+        return category.created_by == user or user.is_superuser
 
 
 class CategoryDeleteView(
@@ -383,11 +430,21 @@ class CategoryDeleteView(
         ) and not category.articles.exists()
 
     def handle_no_permission(self):
-        messages.error(self.request, "You can only delete empty category that you created.")
-        return redirect("catalog:category-detail", pk=self.get_object().pk)
+        messages.error(
+            self.request,
+            "You can only delete empty category that you created."
+        )
+        return redirect(
+            "catalog:category-detail",
+            pk=self.get_object().pk
+        )
 
 
-class ArticleByCategoryView(LoginRequiredMixin, generic.ListView):
+class ArticleByCategoryView(
+    LoginRequiredMixin,
+    generic.ListView
+):
+    """Articles in current category."""
     model = Article
     template_name = "catalog/articles_by_category.html"
     context_object_name = "articles_by_category"
@@ -406,7 +463,11 @@ class ArticleByCategoryView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class AuthorsByCategoryView(LoginRequiredMixin, generic.ListView):
+class AuthorsByCategoryView(
+    LoginRequiredMixin,
+    generic.ListView
+):
+    """Authors in current category."""
     model = Employee
     template_name = "catalog/authors_by_category.html"
     context_object_name = "authors_by_category"
@@ -424,7 +485,7 @@ class AuthorsByCategoryView(LoginRequiredMixin, generic.ListView):
         context["category"] = self.cat
         return context
 
-#_____________________________ Article views__________________________
+
 class ArticleDeleteView(
     LoginRequiredMixin,
     UserPassesTestMixin,
@@ -446,15 +507,25 @@ class ArticleDeleteView(
         return self._cached_object
 
     def test_func(self):
-        obj = self.get_object()
-        return obj.author == self.request.user or self.request.user.is_superuser
+        article = self.get_object()
+        return (article.author == self.request.user or
+                self.request.user.is_superuser)
 
     def handle_no_permission(self):
-        messages.error(self.request, "You can only delete empty category that you created.")
-        return redirect("catalog:category-detail", pk=self.object.pk)
+        messages.error(
+            self.request,
+            "You can only delete article that you created."
+        )
+        return redirect(
+            "catalog:category-detail",
+            pk=self.get_object().pk
+        )
 
 
-class ArticleListView(LoginRequiredMixin, generic.ListView):
+class ArticleListView(
+    LoginRequiredMixin,
+    generic.ListView
+):
     """Article list page."""
 
     model = Article
@@ -495,7 +566,11 @@ class ArticleListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class ArticleDetailsView(LoginRequiredMixin, generic.DetailView):
+class ArticleDetailsView(
+    LoginRequiredMixin,
+    generic.DetailView
+):
+    """Article details page."""
     model = Article
     template_name = "catalog/article_detail.html"
     context_object_name = "article_detail"
@@ -514,7 +589,9 @@ class ArticleDetailsView(LoginRequiredMixin, generic.DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        Article.objects.filter(pk=obj.pk).update(views_count=F("views_count") + 1)
+        Article.objects.filter(
+            pk=obj.pk
+        ).update(views_count=F("views_count") + 1)
         return obj
 
     def get_context_data(self, **kwargs):
@@ -591,7 +668,10 @@ class ArticleUpdateView(
         return self._cached_object
 
     def get_success_url(self):
-        return reverse_lazy("catalog:article-detail", kwargs={"pk": self.get_object().pk})
+        return reverse_lazy(
+            "catalog:article-detail",
+            kwargs={"pk": self.get_object().pk}
+        )
 
     def test_func(self):
         article = self.get_object()
@@ -600,7 +680,10 @@ class ArticleUpdateView(
         return article.author == user or user.is_superuser
 
 
-class ArticleCreateView(LoginRequiredMixin, generic.CreateView):
+class ArticleCreateView(
+    LoginRequiredMixin,
+    generic.CreateView
+):
     """Article create page."""
 
     model = Article
@@ -618,7 +701,7 @@ class ArticleCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
 
-#_____________________________ Comment views__________________________
+
 class CommentaryUpdateView(
     LoginRequiredMixin,
     UserPassesTestMixin,
@@ -630,7 +713,10 @@ class CommentaryUpdateView(
     template_name = "catalog/comment_form.html"
 
     def get_success_url(self):
-        return reverse("catalog:article-detail", kwargs={"pk": self.kwargs["article_pk"]})
+        return reverse(
+            "catalog:article-detail",
+            kwargs={"pk": self.kwargs["article_pk"]}
+        )
 
     def test_func(self):
         comment = self.get_object()
@@ -647,14 +733,16 @@ class CommentaryDeleteView(
     template_name = "catalog/comment_confirm_delete.html"
 
     def get_success_url(self):
-        return reverse("catalog:article-detail", kwargs={"pk": self.kwargs["article_pk"]})
+        return reverse(
+            "catalog:article-detail",
+            kwargs={"pk": self.kwargs["article_pk"]}
+        )
 
     def test_func(self):
         comment = self.get_object()
         return comment.commentator == self.request.user
 
 
-#_____________________________ Employee views__________________________
 class EmployeesListView(
     LoginRequiredMixin,
     generic.ListView
@@ -671,7 +759,7 @@ class EmployeesListView(
 
     def get_queryset(self):
         queryset = Employee.objects.annotate(
-            published_articles_total =Count(
+            published_articles_total=Count(
                 "articles", filter=Q(
                     articles__is_published=True,
                 )
@@ -734,16 +822,18 @@ class EmployeeDetailsView(
         employer = self.object
 
         published_articles = [
-            article for article in employer.articles.all() if article.is_published
+            article for article in employer.articles.all()
+            if article.is_published
         ]
-
 
         context["articles"] = sorted(
             published_articles, key=lambda a: a.created_at, reverse=True
         )
         context["articles_count"] = len(published_articles)
         context["average_rating"] = round(
-            sum(a.avg_rating or 0 for a in published_articles) / len(published_articles),
+            sum(
+                a.avg_rating or 0 for a in published_articles
+            ) / len(published_articles),
             1
         ) if published_articles else None
 
@@ -770,7 +860,10 @@ class EmployeeUpdateView(
         return self._cached_object
 
     def get_success_url(self):
-        return reverse("catalog:employee-detail", kwargs={"pk": self.get_object().pk})
+        return reverse(
+            "catalog:employee-detail",
+            kwargs={"pk": self.get_object().pk}
+        )
 
     def test_func(self):
         return self.request.user.pk == self.get_object().pk
@@ -809,4 +902,3 @@ class RegisterView(View):
             login(request, user)
             return redirect("catalog:home")
         return render(request, "registration/register.html", {"form": form})
-

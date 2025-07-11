@@ -2,7 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.db.models import Avg
 
-from catalog.models import KnowledgeBase, Article, Comment, Category, Rating, Employee
+from catalog.models import (
+    KnowledgeBase,
+    Article,
+    Comment,
+    Category,
+    Rating,
+    Employee,
+)
 
 
 @admin.register(Employee)
@@ -117,17 +124,20 @@ class ArticleAdmin(admin.ModelAdmin):
     average_rating.short_description = "Avg rating"
 
     def rating_count(self, obj):
+        """Rating count of articles."""
         return obj.ratings.count()
     rating_count.short_description = "Rating count"
 
     def comments_count(self, obj):
+        """Number of comments in this article."""
         return obj.comments.count()
     comments_count.short_description = "Comments count"
 
     def get_short_content(self, obj):
         """Get shortened content for list display."""
 
-        return obj.content[:50] + '...' if len(obj.content) > 50 else obj.content
+        return obj.content[:50] + '...' \
+            if len(obj.content) > 50 else obj.content
 
     get_short_content.short_description = "Content"
 
@@ -155,6 +165,7 @@ class ArticleAdmin(admin.ModelAdmin):
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     """Admin configuration for Rating model."""
+
     list_display = (
         "article",
         "employee",
@@ -183,6 +194,7 @@ class RatingAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -214,7 +226,9 @@ class CommentAdmin(admin.ModelAdmin):
     def get_short_commentary(self, obj):
         """Get shortened commentary for list display."""
 
-        return obj.commentary[:50] + '...' if len(obj.commentary) > 50 else obj.commentary
+        return obj.commentary[:50] + '...' if len(
+            obj.commentary
+        ) > 50 else obj.commentary
 
     get_short_commentary.short_description = "Commentary"
 

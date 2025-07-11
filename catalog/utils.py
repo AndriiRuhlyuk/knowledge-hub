@@ -1,5 +1,10 @@
 from django.db.models import Avg, Count, Q
-from .models import Article, KnowledgeBase, Category, Employee, Comment
+from .models import (
+    Article,
+    KnowledgeBase,
+    Category,
+    Employee,
+)
 
 
 def get_site_statistics() -> dict[str, int]:
@@ -10,9 +15,15 @@ def get_site_statistics() -> dict[str, int]:
         total_categories=Count("categories"),
     )
     articles_stats = Article.objects.aggregate(
-        total_articles=Count("id", filter=Q(is_published=True)),
+        total_articles=Count(
+            "id",
+            filter=Q(is_published=True)
+        ),
         total_comments=Count("comments"),
-        total_authors=Count("author", filter=Q(is_published=True), distinct=True),
+        total_authors=Count(
+            "author",
+            filter=Q(is_published=True),
+            distinct=True),
     )
     employee_count = Employee.objects.count()
 
@@ -23,8 +34,12 @@ def get_site_statistics() -> dict[str, int]:
     }
 
 
-def get_top_statistics()-> dict[str, any]:
-    """Return most viewed, top-rated, most active author, and largest category."""
+def get_top_statistics() -> dict[str, any]:
+    """
+    Return most viewed, top-rated,
+    most active author, and largest category.
+    """
+
     return {
         "most_viewed_article": Article.objects.filter(
             is_published=True,

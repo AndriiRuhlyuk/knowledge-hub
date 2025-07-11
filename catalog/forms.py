@@ -1,13 +1,21 @@
 from django import forms
-from django.contrib.auth.models import User
 
-from catalog.models import Rating, Comment, Employee, KnowledgeBase, Category, Article
+from catalog.models import (
+    Rating,
+    Comment,
+    Employee,
+    KnowledgeBase,
+    Category,
+    Article
+)
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django_select2.forms import ModelSelect2Widget
 
 
 class KnowledgeBaseSearchForm(forms.Form):
+    """Search form for a knowledge base (by title)"""
+
     title = forms.CharField(
         max_length=255,
         required=False,
@@ -21,6 +29,8 @@ class KnowledgeBaseSearchForm(forms.Form):
 
 
 class CategorySearchForm(forms.Form):
+    """Search form for a category (by topic)"""
+
     topic = forms.CharField(
         max_length=255,
         required=False,
@@ -34,6 +44,8 @@ class CategorySearchForm(forms.Form):
 
 
 class ArticleSearchForm(forms.Form):
+    """Search form for an article (by title)"""
+
     title = forms.CharField(
         max_length=255,
         required=False,
@@ -47,6 +59,8 @@ class ArticleSearchForm(forms.Form):
 
 
 class EmployeeSearchForm(forms.Form):
+    """Search form for an employee (by first_name ot last_name)"""
+
     query = forms.CharField(
         max_length=255,
         required=False,
@@ -59,6 +73,8 @@ class EmployeeSearchForm(forms.Form):
 
 
 class RatingForm(forms.ModelForm):
+    """Rating form for an article (1 to 5)"""
+
     class Meta:
         model = Rating
         fields = ["rating"]
@@ -72,6 +88,8 @@ class RatingForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    """Comment form for an article"""
+
     class Meta:
         model = Comment
         fields = ["commentary"]
@@ -87,6 +105,8 @@ class CommentForm(forms.ModelForm):
 
 
 class EmployeeUpdateForm(UserChangeForm):
+    """Form update employee"""
+
     class Meta:
         model = Employee
         fields = (
@@ -109,10 +129,18 @@ class EmployeeUpdateForm(UserChangeForm):
             existing_classes = widget.attrs.get("class", "")
 
             if isinstance(widget, forms.RadioSelect):
-                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+                widget.attrs["class"] = (
+                    f"{existing_classes} "
+                    f"form-check-input border "
+                    f"border-dark"
+                ).strip()
 
             else:
-                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+                widget.attrs["class"] = (
+                    f"{existing_classes} "
+                    f"form-control border "
+                    f"border-dark"
+                ).strip()
 
 
 class EmployeeRegistrationForm(UserCreationForm):
@@ -147,10 +175,12 @@ class EmployeeRegistrationForm(UserCreationForm):
             existing_classes = widget.attrs.get("class", "")
 
             if isinstance(widget, forms.RadioSelect):
-                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} form-check-input"
+                                         f" border border-dark").strip()
 
             else:
-                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} form-control"
+                                         f" border border-dark").strip()
 
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -160,6 +190,8 @@ class EmployeeRegistrationForm(UserCreationForm):
 
 
 class KnowledgeBaseForm(forms.ModelForm):
+    """Form for a knowledge base"""
+
     created_by = forms.ModelChoiceField(
         queryset=Employee.objects.all(),
         widget=forms.RadioSelect
@@ -177,13 +209,17 @@ class KnowledgeBaseForm(forms.ModelForm):
             existing_classes = widget.attrs.get("class", "")
 
             if isinstance(widget, forms.RadioSelect):
-                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} form-check-input"
+                                         f" border border-dark").strip()
 
             else:
-                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} form-control "
+                                         f"border border-dark").strip()
 
 
 class CategoryForm(forms.ModelForm):
+    """Form for a category"""
+
     knowledge_base = forms.ModelChoiceField(
         queryset=KnowledgeBase.objects.all(),
         widget=forms.RadioSelect
@@ -205,25 +241,31 @@ class CategoryForm(forms.ModelForm):
             existing_classes = widget.attrs.get("class", "")
 
             if isinstance(widget, forms.RadioSelect):
-                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} form-check-input"
+                                         f" border border-dark").strip()
 
             else:
-                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} form-control "
+                                         f"border border-dark").strip()
 
 
 class ArticleForm(forms.ModelForm):
+    """Form for an article"""
+
     category = forms.ModelChoiceField(
         queryset=Category.objects.all().none(),
         widget=forms.RadioSelect
     )
-
 
     class Meta:
         model = Article
         fields = ("title", "content", "category", "author")
         widgets = {
             "author": ModelSelect2Widget(
-                search_fields=["first_name__icontains", "last_name__icontains"],
+                search_fields=[
+                    "first_name__icontains",
+                    "last_name__icontains"
+                ],
                 attrs={
                     "class": "form-control border border-dark",
                     "data-minimum-input-length": 1,
@@ -235,12 +277,18 @@ class ArticleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields["category"].queryset = Category.objects.all()
+
         for field_name, field in self.fields.items():
             widget = field.widget
             existing_classes = widget.attrs.get("class", "")
 
             if isinstance(widget, forms.RadioSelect):
-                widget.attrs["class"] = f"{existing_classes} form-check-input border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} "
+                                         f"form-check-input border "
+                                         f"border-dark").strip()
 
             else:
-                widget.attrs["class"] = f"{existing_classes} form-control border border-dark".strip()
+                widget.attrs["class"] = (f"{existing_classes} "
+                                         f"form-control border "
+                                         f"border-dark").strip()

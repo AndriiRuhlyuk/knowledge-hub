@@ -26,7 +26,9 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="category",
             constraint=models.UniqueConstraint(
-                fields=("topic", "knowledge_base"), name="unique_category_per_kb"
+                fields=(
+                    "topic", "knowledge_base"
+                ), name="unique_category_per_kb"
             ),
         ),
         migrations.AddConstraint(

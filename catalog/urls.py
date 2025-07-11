@@ -31,8 +31,6 @@ from catalog.views import (
     ArticleDeleteView,
 )
 
-
-
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path(
@@ -123,7 +121,11 @@ urlpatterns = [
         CommentaryDeleteView.as_view(),
         name="comment-delete",
     ),
-    path("article_create", ArticleCreateView.as_view(), name="article-create"),
+    path(
+        "article_create",
+        ArticleCreateView.as_view(),
+        name="article-create"
+    ),
     path(
         "article/<int:pk>/update/",
         ArticleUpdateView.as_view(),
@@ -135,20 +137,50 @@ urlpatterns = [
         name="article-delete",
     ),
 
-    path("employee_list/", EmployeesListView.as_view(), name="employee-list"),
-    path("employee/<int:pk>/", EmployeeDetailsView.as_view(), name="employee-detail"),
-    path("employee/<int:pk>/update/", EmployeeUpdateView.as_view(), name="employee-update"),
-    path("employee/<int:pk>/delete/", EmployeeDeleteView.as_view(), name="employee-delete"),
-    path("register/", RegisterView.as_view(), name="register"),
+    path(
+        "employee_list/",
+        EmployeesListView.as_view(),
+        name="employee-list"
+    ),
+    path(
+        "employee/<int:pk>/",
+        EmployeeDetailsView.as_view(),
+        name="employee-detail"
+    ),
+    path(
+        "employee/<int:pk>/update/",
+        EmployeeUpdateView.as_view(),
+        name="employee-update"
+    ),
+    path(
+        "employee/<int:pk>/delete/",
+        EmployeeDeleteView.as_view(),
+        name="employee-delete"
+    ),
+    path(
+        "register/",
+        RegisterView.as_view(),
+        name="register"
+    ),
 
-    path("password-change/", auth_views.PasswordChangeView.as_view(
-        template_name="registration/password_change_form.html",
-        success_url=reverse_lazy("catalog:password-change-done")
-    ), name="password-change"),
+    path(
+        "password-change/",
+        auth_views.PasswordChangeView.as_view(
+            template_name="registration/password_change_form.html",
+            success_url=reverse_lazy(
+                "catalog:password-change-done"
+            )
+        ),
+        name="password-change"
+    ),
 
-    path("password-change/done/", auth_views.PasswordChangeDoneView.as_view(
-        template_name="registration/password_change_done.html"
-    ), name="password-change-done"),
+    path(
+        "password-change/done/",
+        auth_views.PasswordChangeDoneView.as_view(
+            template_name="registration/password_change_done.html"
+        ),
+        name="password-change-done"
+    ),
 ]
 
 app_name = "catalog"
