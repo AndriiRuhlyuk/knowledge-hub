@@ -1,0 +1,32 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <div class="container">
+    <h2>Add Comment to "{{ comment.article.title }}"</h2>
+
+    <!-- Показуємо пост, до якого додаємо коментар -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">{{comment.article.title }}</h5>
+        <p class="card-text">{{ comment.article.content|truncatewords:30 }}</p>
+        <small class="text-muted">by {{ comment.article.author.full_name }} on {{ comment.article.created_at }}</small>
+      </div>
+    </div>
+
+    <!-- Форма коментаря -->
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">Add Comment</button>
+          <a href="{% url 'catalog:article-detail' pk=object.article.pk %}" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  {% include "includes/navigation.html" %}
+
+
+  <header>
+    <div class="page-header min-height-400" style="background-image: url('{{ ASSETS_ROOT }}/img/city-profile.jpg');"
+         loading="lazy">
+      <span class="mask bg-gradient-dark opacity-8"></span>
+    </div>
+  </header>
+
+  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4">
+
+    <section class="py-sm-7 py-5 position-relative">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 mx-auto">
+            <div class="row py-5">
+              <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
+
+                {% for cat in categories %}
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h3 class="mb-0">{{ cat.topic }}</h3>
+                  <div class="d-block">
+                    <button type="button" class="btn btn-sm btn-outline-info text-nowrap mb-0">
+                      <a href="{% url 'catalog:c-articles' pk=cat.id %}">Articles</a></button>
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-auto">
+                    <span class="h6">{{ cat.articles_count }}</span>
+                    <span>Articles count</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class="h6">{{ cat.authors_count }}</span>
+                    <span>Authors</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class="h6">{{ cat.comments_count }}</span>
+                    <span>Comments</span>
+                  </div>
+                </div>
+                {% endfor %}
+              {% include "includes/pagination.html" %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+</div>
+{% endblock %}

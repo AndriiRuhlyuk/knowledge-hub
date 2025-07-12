@@ -1,0 +1,117 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+
+<!-- -------- START HEADER 1 w/ text and image on right ------- -->
+{% block content %}
+
+  <header>
+    {% include "includes/navigation.html" %}
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-absolute bg-transparent shadow-none">
+
+
+    </nav>
+    <div class="page-header min-vh-100"
+         style="background-image: url( &#39;https://images.unsplash.com/photo-1520769945061-0a448c463865?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80&#39;);"
+         loading="lazy">
+      <span class="mask bg-gradient-dark opacity-5"></span>
+      <div class="container">
+        <div class="row align-items-center">
+
+          <div class="col-lg-6 col-md-6 mb-4">
+            <h1 class="text-white mb-4">Employee: {{ employee_detail }}</h1>
+          </div>
+
+
+          <div class="col-lg-6 col-md-6 mb-4">
+            <div class="rotating-card-container" style="width: 100%;">
+              <div
+                  class="card card-rotate card-background card-background-mask-primary shadow-primary mt-md-0 mt-5"
+                  style="height: 100%;"
+              >
+                <div class="front front-background"
+                     style="background-image: url('https://images.unsplash.com/photo-1569683795645-b62e50fbf103?ixlib=rb-1.2.1&auto=format&fit=crop&w=987&q=80'); background-size: cover;">
+                  <div class="card-body py-10 text-center">
+                    <i class="material-icons text-white text-4xl my-3">touch_app</i>
+                    <p class="text-white opacity-8">
+
+                      {% if employee_detail %}
+                        <ul>
+                          <li>
+                            <strong>Full Name:</strong> {{ employee_detail.full_name }}
+                          </li>
+                          <li>
+                            <strong>Level:</strong>
+                            {% if employee_detail.level %}
+                              {{ employee_detail.level }}
+                            {% else %}
+                              Not specified.
+                            {% endif %}
+                          </li>
+                          <li>
+                            <strong>Position:</strong> {{ employee_detail.position }}
+                          </li>
+                          <li>
+                            <strong>Project:</strong>
+                            {% if employee_detail.project %}
+                              {{ employee_detail.project }}
+                            {% else %}
+                              Not specified.
+                            {% endif %}
+                          </li>
+                          <li>
+                            <strong>Rating:</strong> {{ employee_detail.author_rating }}
+                          </li>
+                          <li>
+                            <strong>Articles ({{ employee_detail.published_articles_count }}):</strong>
+                            <ul>
+                              {% for article in employee_detail.articles.all|slice:"3" %}
+                                <li>{{ article.title }} (Category: {{ article.category }}; Knowledge
+                                  base: {{ article.category.knowledge_base }})
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </li>
+                          <hr>
+
+                        </ul>
+                      {% else %}
+                        <p>
+                          No Information available.
+                        </p>
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+
+
+                <div class="back back-background"
+                     style="background-image: url('https://images.unsplash.com/photo-1498889444388-e67ea62c464b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1365&q=80'); background-size: cover;">
+                  <div class="card-body pt-7 text-center">
+                    <h3 class="text-white">Author's username: {{ employee_detail.username }} </h3>
+                    {% if employee_detail.pk == user.pk %}
+                      <p><a href="{% url 'catalog:employee-update' pk=employee_detail.pk %}"
+                            class="btn btn-white btn-sm w-50 mx-auto mt-3">Update Information</a></p>
+                      <p><a href="{% url 'password_change' %}" class="btn btn-outline-warning">Change Password</a></p>
+                    {% else %}
+                      <p class="text-white opacity-8"> You can't edit information about {{ employee_detail.first_name }}.</p>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
+                      <a href="{% url 'catalog:employee-delete' pk=employee_detail.pk %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+
+
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+{% endblock %}
+<!-- -------- END HEADER 1 w/ text and image on right ------- -->

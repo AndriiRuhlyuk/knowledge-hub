@@ -1,0 +1,103 @@
+<!-- Navbar -->
+<div class="position-sticky z-index-sticky top-0 w-100">
+  <div class="row">
+    <div class="col-12">
+      <nav
+          class="navbar navbar-expand-lg navbar-dark bg-gradient-dark z-index-3 py-2">
+        <div class="container">
+          <a class="navbar-brand text-white" href="/" rel="tooltip" title="Designed and Coded by Creative Tim"
+             data-placement="bottom" target="_blank">
+            <strong>Knowledge Hub</strong>
+          </a>
+          <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
+                  aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon mt-2">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </span>
+          </button>
+          <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
+            <ul class="navbar-nav navbar-nav-hover ms-auto">
+              <li class="nav-item dropdown dropdown-hover mx-2">
+                <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" id="dropdownMenuPages"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="material-icons opacity-6 me-2 text-lg">dashboard</i>
+                  Pages
+                  <img src="{{ ASSETS_ROOT }}/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-auto ms-md-2">
+                </a>
+                <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+                     aria-labelledby="dropdownMenuPages">
+                  <div class="d-none d-lg-block">
+                    <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                      Sections
+                    </h6>
+                    <a href="{% url 'catalog:knowledge-list' %}" class="dropdown-item border-radius-md">
+                      <span>Knowledge Base List</span>
+                    </a>
+                    <a href="{% url 'catalog:category-list' %}" class="dropdown-item border-radius-md">
+                      <span>Categories List</span>
+                    </a>
+                    <a href="{% url 'catalog:article-list' %}" class="dropdown-item border-radius-md">
+                      <span>Articles List</span>
+                    </a>
+                    <a href="{% url 'catalog:employee-list' %}" class="dropdown-item border-radius-md">
+                      <span>Authors/Employee List</span>
+                    </a>
+
+                  </div>
+                </div>
+              </li>
+
+              <li class="nav-item dropdown dropdown-hover mx-2">
+                <a class="nav-link ps-2 d-flex cursor-pointer align-items-center" id="dropdownMenuPages"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="material-icons opacity-6 me-2 text-lg">dashboard</i>
+                  Create
+                  <img src="{{ ASSETS_ROOT }}/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-auto ms-md-2">
+                </a>
+                <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+                     aria-labelledby="dropdownMenuPages">
+                  <div class="d-none d-lg-block">
+                    <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                      Sections
+                    </h6>
+                    <a href="{% url 'catalog:knowledge-base-create' %}" class="dropdown-item border-radius-md">
+                      <span>Knowledge Base</span>
+                    </a>
+                    <a href="{% url 'catalog:category-create' %}" class="dropdown-item border-radius-md">
+                      <span>Category</span>
+                    </a>
+                    <a href="{% url 'catalog:article-create' %}" class="dropdown-item border-radius-md">
+                      <span>Article</span>
+                    </a>
+                  </div>
+                </div>
+              </li>
+
+              {% if user.is_authenticated %}
+                <li class="nav-item ms-3">
+                  <div class="d-flex align-items-center px-2 py-1 rounded-3" style="background-color: #d0006f;">
+                    <span class="text-white me-2">
+                      <i class="fas fa-user-circle me-1"></i> {{ user.first_name }}
+                    </span>
+                    <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+                      {% csrf_token %}
+                      <button type="submit" class="d-flex align-items-center px-2 py-1 rounded-3 me-2 text-white"
+                              style="font-size: 0.8rem; background-color: #323a54">
+                        <strong>Logout</strong>
+                      </button>
+                    </form>
+                  </div>
+                </li>
+              {% endif %}
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+    </div>
+  </div>
+</div>

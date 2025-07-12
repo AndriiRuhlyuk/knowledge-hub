@@ -1,2 +1,19 @@
+#IDE
 .idea
+
+#Python
 .venv
+**__pycache__
+*.pyc
+*.pyo
+
+#Django
+*.sqlite3
+db.sqlite3
+*.db
+
+# Environment variables
+.env
+
+#OS
+.DS_Store

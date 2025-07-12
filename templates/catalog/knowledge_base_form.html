@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  {% include "includes/navigation.html" %}
+  <div class="container mt-5">
+    <h1>{{ object|yesno:"Update,Create" }} Knowledge Base</h1>
+    <form action="" method="post" novalidate>
+      {% csrf_token %}
+      {{ form|crispy }}
+
+      <input type="submit" value="Submit" class="btn btn-primary">
+      <a href="{% if object %}{% url 'catalog:knowledge-base-detail' pk=object.pk %}{% else %}{% url 'catalog:knowledge-list' %}{% endif %}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
+
+
+
