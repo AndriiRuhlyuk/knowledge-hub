@@ -1,0 +1,386 @@
+[
+{
+    "model": "catalog.knowledgebase",
+    "pk": 1,
+    "fields": {
+        "title": "Films",
+        "created_at": "2025-07-03T15:55:23.029Z",
+        "short_description": "Movies - is real stories!",
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.knowledgebase",
+    "pk": 3,
+    "fields": {
+        "title": "Learning",
+        "created_at": "2025-07-03T15:55:40.313Z",
+        "short_description": "Knowledge makes life harder. Using knowledge in practice makes life easier.",
+        "created_by": 7
+    }
+},
+{
+    "model": "catalog.knowledgebase",
+    "pk": 4,
+    "fields": {
+        "title": "Sport",
+        "created_at": "2025-07-03T17:05:10.777Z",
+        "short_description": "Movement is life!",
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.knowledgebase",
+    "pk": 5,
+    "fields": {
+        "title": "Pets",
+        "created_at": "2025-07-03T17:05:31.632Z",
+        "short_description": "Take care of those who need love.",
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.knowledgebase",
+    "pk": 6,
+    "fields": {
+        "title": "USA",
+        "created_at": "2025-07-10T15:49:07.089Z",
+        "short_description": "The United States of America (USA), also known as the United States (U.S.) or America, is a country primarily located in North America. It is a federal republic of 50 states and a federal capital district, Washington, D.C. The 48 contiguous states border Canada to the north and Mexico to the south, with the semi-exclave of Alaska in the northwest and the archipelago of Hawaii in the Pacific Ocean. The \\",
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.knowledgebase",
+    "pk": 7,
+    "fields": {
+        "title": "kjsg;kj",
+        "created_at": "2025-07-14T13:48:22.615Z",
+        "short_description": "af,jh",
+        "created_by": 6
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "topic": "Thriller",
+        "created_at": "2025-07-03T16:06:40.175Z",
+        "knowledge_base": 1,
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "topic": "Drama",
+        "created_at": "2025-07-03T16:06:52.292Z",
+        "knowledge_base": 1,
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "topic": "Erlang",
+        "created_at": "2025-07-03T16:07:05.090Z",
+        "knowledge_base": 3,
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+        "topic": "English",
+        "created_at": "2025-07-03T16:07:16.784Z",
+        "knowledge_base": 3,
+        "created_by": 1
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 6,
+    "fields": {
+        "topic": "Comedy",
+        "created_at": "2025-07-03T16:08:04.394Z",
+        "knowledge_base": 1,
+        "created_by": 7
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$HVLQBKU121aQeMtaCsPeYF$M7+NsSNkgdzgmHFDQEOGByGY3ORKiNkFA67QDQPaK/g=",
+        "last_login": "2025-07-15T18:09:57.282Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "Andrii",
+        "last_name": "Rykhliuk",
+        "email": "admin.admin@admin.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-02T16:19:00Z",
+        "project": "SCU",
+        "position": "Head of Recruitment",
+        "level": "Head",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$roiOIbhQ0R59v5VXK8Olp5$IeDtaT5KKQ2lJsP3eYZ1xqcPfJeO1roQOf4qRTpeWqc=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "naughty-dog",
+        "first_name": "Naughty",
+        "last_name": "Dog",
+        "email": "ndog@ndog.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-03T16:00:03Z",
+        "project": "",
+        "position": "Game Dev",
+        "level": "Senior",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$c3ObjknNFOeiCo0XKd8sHy$K/IG79/DyoJhvrhM4GkQT/bCMgh+FeiAo7Z1R4iFuWY=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "ton-heddis",
+        "first_name": "Tonny",
+        "last_name": "Heddis",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-03T16:02:44Z",
+        "project": "Internal",
+        "position": "Dackend",
+        "level": "Middle",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$dd1aYzNWbZZWszwvxC2ZW8$g74+ie3WD9yxvSuNCsoCk5AGGEuGPUPcMJaYJHKOMdM=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "kevin-f",
+        "first_name": "Kevin",
+        "last_name": "Feige",
+        "email": "kevin@kevin.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-03T16:05:10Z",
+        "project": "External",
+        "position": "movie maker",
+        "level": "Lead",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$8CjQ9Wh3CpUvPYB9SUcRJL$LbQawRN9ytafWyS2KZuhg2jBomRcsR9QAF+7+Md2uoQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "david-h",
+        "first_name": "David",
+        "last_name": "Heyman",
+        "email": "david@david.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-03T16:09:15Z",
+        "project": "Internal",
+        "position": "Mistery",
+        "level": "Senior",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$To1O4p60sOEGbS61mYD7qc$kakq4F7RM3jPpNxK2XRb5lB6s6VXHx5uaA/kktm3zNU=",
+        "last_login": "2025-07-06T16:00:12.441Z",
+        "is_superuser": false,
+        "username": "dariia.d",
+        "first_name": "Dariia",
+        "last_name": "Rykhliuk",
+        "email": "d.dar@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-06T16:00:12.180Z",
+        "project": "StoryTeller",
+        "position": "QA",
+        "level": "Middle",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.employee",
+    "pk": 9,
+    "fields": {
+        "password": "123password",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "test",
+        "first_name": "first_name",
+        "last_name": "last_name",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-10T17:07:33.296Z",
+        "project": "",
+        "position": "position",
+        "level": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "catalog.article",
+    "pk": 2,
+    "fields": {
+        "title": "About Erlang",
+        "content": "Erlang (/ˈɜːrlæŋ/ UR-lang) is a general-purpose, concurrent, functional high-level programming language, and a garbage-collected runtime system. The term Erlang is used interchangeably with Erlang/OTP, or Open Telecom Platform (OTP), which consists of the Erlang runtime system, several ready-to-use components (OTP) mainly written in Erlang, and a set of design principles for Erlang programs.[5]\r\n\r\nThe Erlang runtime system is designed for systems with these traits:\r\n\r\nDistributed\r\nFault-tolerant\r\nSoft real-time\r\nHighly available, non-stop applications\r\nHot swapping, where code can be changed without stopping a system.[6]\r\nThe Erlang programming language has immutable data, pattern matching, and functional programming.[7] The sequential subset of the Erlang language supports eager evaluation, single assignment, and dynamic typing.\r\n\r\nA normal Erlang application is built out of hundreds of small Erlang processes.\r\n\r\nIt was originally proprietary software within Ericsson, developed by Joe Armstrong, Robert Virding, and Mike Williams in 1986,[8] but was released as free and open-source software in 1998.[9][10] Erlang/OTP is supported and maintained by the Open Telecom Platform (OTP) product unit at Ericsson.",
+        "author": 4,
+        "category": 3,
+        "is_published": true,
+        "views_count": 42,
+        "created_at": "2025-07-03T16:14:45.988Z",
+        "updated_at": "2025-07-04T13:26:57.639Z",
+        "reading_time": 16
+    }
+},
+{
+    "model": "catalog.article",
+    "pk": 3,
+    "fields": {
+        "title": "About Marvel",
+        "content": "Marvel Comics is a New York City–based comic book publisher, a property of the Walt Disney Company since December 31, 2009, and a subsidiary of Disney Publishing Worldwide since March 2023. Marvel was founded in 1939 by Martin Goodman as Timely Comics,[3] and by 1951 had generally become known as Atlas Comics. The Marvel era began in August 1961 with the launch of The Fantastic Four and other superhero titles created by Stan Lee, Jack Kirby, Steve Ditko, and numerous others. The Marvel brand, which had been used over the years and decades, was solidified as the company's primary brand.\r\n\r\nMarvel counts among its characters such well-known superheroes as Spider-Man, Wolverine, Iron Man, Captain America, Hulk, Thor, Doctor Strange, Daredevil, Black Panther, and Captain Marvel, as well as popular superhero teams such as the Avengers, X-Men, Fantastic Four, and Guardians of the Galaxy. Its stable of well-known supervillains includes Doctor Doom, Magneto, Green Goblin, Venom, Red Skull, Loki, Ultron, Thanos, Apocalypse, and Galactus. Most of Marvel's fictional characters operate in a single reality known as the Marvel Universe, with most locations mirroring real-life places; many major characters are based in New York City.[4] Additionally, Marvel has published several licensed properties from other companies. This includes Star Wars comics, twice from 1977 to 1987, and again since 2015.",
+        "author": 5,
+        "category": 1,
+        "is_published": true,
+        "views_count": 2,
+        "created_at": "2025-07-03T16:15:31.106Z",
+        "updated_at": "2025-07-04T13:26:54.654Z",
+        "reading_time": 21
+    }
+},
+{
+    "model": "catalog.article",
+    "pk": 4,
+    "fields": {
+        "title": "About Drama",
+        "content": "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.[1] The drama of this kind is usually qualified with additional terms that specify its particular super-genre, macro-genre, or micro-genre,[2] such as soap opera, police crime drama, political drama, legal drama, historical drama, domestic drama, teen drama, and comedy drama (dramedy). These terms tend to indicate a particular setting or subject matter, or they combine a drama's otherwise serious tone with elements that encourage a broader range of moods. To these ends, a primary element in a drama is the occurrence of conflict—emotional, social, or otherwise—and its resolution in the course of the storyline.\r\n\r\nAll forms of cinema or television that involve fictional stories are forms of drama in the broader sense if their storytelling is achieved by means of actors who represent (mimesis) characters. In this broader sense, drama is a mode distinct from novels, short stories, and narrative poetry or songs.[3] In the modern era, before the birth of cinema or television, \"drama\" within theatre was a type of play that was neither a comedy nor a tragedy. It is this narrower sense that the film and television industries, along with film studies, adopted. \"Radio drama\" has been used in both senses—originally transmitted in a live performance, it has also been used to describe the more high-brow and serious end of the dramatic output of radio.[4]",
+        "author": 6,
+        "category": 2,
+        "is_published": true,
+        "views_count": 37,
+        "created_at": "2025-07-03T16:16:23.182Z",
+        "updated_at": "2025-07-04T13:26:49.061Z",
+        "reading_time": 24
+    }
+},
+{
+    "model": "catalog.article",
+    "pk": 5,
+    "fields": {
+        "title": "About Comedy",
+        "content": "The comedy film is a film genre that emphasizes humor. These films are designed to amuse audiences and make them laugh.[1] Films in this genre typically have a happy ending, with dark comedy being an exception to this rule. Comedy is one of the oldest genres in film, and it is derived from classical comedy in theatre. Some of the earliest silent films were slapstick comedies, which often relied on visual depictions, such as sight gags and pratfalls, so they could be enjoyed without requiring sound. To provide drama and excitement to silent movies, live music was played in sync with the action on the screen, on pianos, organs, and other instruments.[2] When sound films became more prevalent during the 1920s, comedy films grew in popularity, as laughter could result from both burlesque situations but also from humorous dialogue.\r\n\r\nComedy, compared with other film genres, places more focus on individual star actors, with many former stand-up comics transitioning to the film industry due to their popularity.[3]\r\n\r\nIn The Screenwriters Taxonomy (2017), Eric R. Williams contends that film genres are fundamentally based upon a film's atmosphere, character, and story, and therefore, the labels \"drama\" and \"comedy\" are too broad to be considered a genre.[4] Instead, his taxonomy argues that comedy is a type of film that contains at least a dozen different sub-types.[5]",
+        "author": 5,
+        "category": 2,
+        "is_published": true,
+        "views_count": 84,
+        "created_at": "2025-07-03T16:17:15.522Z",
+        "updated_at": "2025-07-11T16:05:20.476Z",
+        "reading_time": 3
+    }
+},
+{
+    "model": "catalog.rating",
+    "pk": 2,
+    "fields": {
+        "article": 5,
+        "employee": 1,
+        "rating": 5
+    }
+},
+{
+    "model": "catalog.rating",
+    "pk": 4,
+    "fields": {
+        "article": 2,
+        "employee": 1,
+        "rating": 4
+    }
+},
+{
+    "model": "catalog.rating",
+    "pk": 5,
+    "fields": {
+        "article": 4,
+        "employee": 1,
+        "rating": 3
+    }
+},
+{
+    "model": "catalog.comment",
+    "pk": 8,
+    "fields": {
+        "article": 2,
+        "commentator": 1,
+        "commentary": "Great!",
+        "created_at": "2025-07-06T17:48:20.218Z"
+    }
+},
+{
+    "model": "catalog.comment",
+    "pk": 9,
+    "fields": {
+        "article": 2,
+        "commentator": 1,
+        "commentary": "Hi!",
+        "created_at": "2025-07-08T17:50:35.492Z"
+    }
+},
+{
+    "model": "catalog.comment",
+    "pk": 11,
+    "fields": {
+        "article": 4,
+        "commentator": 1,
+        "commentary": "Hello",
+        "created_at": "2025-07-08T18:29:25.090Z"
+    }
+},
+{
+    "model": "catalog.comment",
+    "pk": 12,
+    "fields": {
+        "article": 5,
+        "commentator": 1,
+        "commentary": "Bellisimo",
+        "created_at": "2025-07-09T19:53:04.123Z"
+    }
+}
+]
