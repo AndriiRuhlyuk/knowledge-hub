@@ -90,3 +90,6 @@ https://drive.google.com/file/d/1FncH5pgTXce1yAfYgXhIJdqS0gBKghb4/view?usp=shari
 
 **Testing**
 python manage.py test
+
+**Deployed resource**
+https://knowledge-hub-ucmq.onrender.com
