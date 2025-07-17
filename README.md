@@ -93,3 +93,5 @@ python manage.py test
 
 **Deployed resource**
 https://knowledge-hub-ucmq.onrender.com
+test login: user
+test password: user12345
